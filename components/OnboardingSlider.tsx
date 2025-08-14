@@ -74,11 +74,11 @@ export default function OnboardingSlider({
   }
 
   const handleImageLoad = (index: number) => {
-    setImagesLoaded(prev => new Set([...prev, index]))
+    setImagesLoaded(prev => new Set(Array.from(prev).concat(index)))
   }
 
   const handleImageError = (index: number) => {
-    setImageErrors(prev => new Set([...prev, index]))
+    setImageErrors(prev => new Set(Array.from(prev).concat(index)))
     console.error(`Failed to load image: ${onboardingSlides[index].image}`)
   }
 
