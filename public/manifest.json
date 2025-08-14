@@ -1,0 +1,17 @@
+{
+  "name": "KDS Corner - Your Creative Digital Solutions Partner",
+  "short_name": "KDS Corner",
+  "description": "KDS Corner - Tempat di mana kreativitas bertemu dengan teknologi. Solusi digital inovatif untuk website, aplikasi mobile, dan layanan kreatif lainnya.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#6366f1",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

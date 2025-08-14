@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* legacy variables mapping (optional) */
+:root {
+  --primary: 252 82% 56%;
+  --secondary: 210 90% 60%;
+  --surface: 0 0% 100%;
+  --accent: 0 84% 60%;
+  --border: 0 0% 85%;
+}
+
+/* Bring over any global resets you need here */
+html, body {
+  scroll-behavior: smooth;
+}

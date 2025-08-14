@@ -1,0 +1,42 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient border -->
+  <circle cx="20" cy="20" r="18" stroke="url(#borderGradient)" stroke-width="1.5" fill="none" opacity="0.4"/>
+  
+  <!-- Modern stylish K logo -->
+  <g transform="translate(20, 20)">
+    <!-- Main vertical line with rounded ends -->
+    <path d="M-7 -13V13" stroke="url(#logoGradient)" stroke-width="3.5" stroke-linecap="round"/>
+    
+    <!-- Upper diagonal with curve -->
+    <path d="M-7 -1Q-4 -4 2 -10Q6 -13 10 -13" stroke="url(#logoGradient)" stroke-width="3" stroke-linecap="round" fill="none"/>
+    
+    <!-- Lower diagonal with curve -->
+    <path d="M-7 1Q-4 4 2 10Q6 13 10 13" stroke="url(#logoGradient)" stroke-width="3" stroke-linecap="round" fill="none"/>
+    
+    <!-- Stylish accent diamond -->
+    <path d="M-7 -1L-5 -3L-3 -1L-5 1Z" fill="url(#accentGradient)" opacity="0.8"/>
+    <path d="M-7 1L-5 3L-3 1L-5 -1Z" fill="url(#accentGradient)" opacity="0.6"/>
+  </g>
+  
+  <!-- Decorative elements -->
+  <circle cx="32" cy="8" r="1" fill="url(#accentGradient)" opacity="0.7"/>
+  <circle cx="8" cy="32" r="1" fill="url(#accentGradient)" opacity="0.5"/>
+  
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1" />
+      <stop offset="30%" style="stop-color:#8b5cf6" />
+      <stop offset="70%" style="stop-color:#a855f7" />
+      <stop offset="100%" style="stop-color:#3b82f6" />
+    </linearGradient>
+    <linearGradient id="borderGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1" />
+      <stop offset="50%" style="stop-color:#8b5cf6" />
+      <stop offset="100%" style="stop-color:#3b82f6" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b" />
+      <stop offset="100%" style="stop-color:#f97316" />
+    </linearGradient>
+  </defs>
+</svg>
