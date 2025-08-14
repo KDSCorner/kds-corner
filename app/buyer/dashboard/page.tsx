@@ -275,7 +275,7 @@ export default function BuyerDashboard() {
         <h2 style={{ margin: '0 0 20px 0', fontSize: '20px', fontWeight: 'bold', color: theme.textPrimary }}>
           Recent Orders
         </h2>
-        <div style={{ space: '16px' }}>
+        <div style={{ gap: '16px' }}>
           <div style={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
