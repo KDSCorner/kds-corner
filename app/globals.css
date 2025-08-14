@@ -2,16 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-/* legacy variables mapping (optional) */
+/* CSS Custom Properties for Auth Pages */
 :root {
+  /* Legacy variables */
   --primary: 252 82% 56%;
   --secondary: 210 90% 60%;
   --surface: 0 0% 100%;
   --accent: 0 84% 60%;
   --border: 0 0% 85%;
+  
+  /* Auth page variables */
+  --auth-primary-blue: #6366f1;
+  --auth-primary-blue-dark: #4f46e5;
+  --auth-text-primary: #0f172a;
+  --auth-text-secondary: #64748b;
+  --auth-text-white: #ffffff;
+  --auth-text-white-60: rgba(255, 255, 255, 0.6);
+  --auth-text-white-70: rgba(255, 255, 255, 0.7);
+  --auth-text-white-80: rgba(255, 255, 255, 0.8);
+  --auth-border-color: #e2e8f0;
+  --auth-bg-white: #ffffff;
+  --auth-bg-error: #fef2f2;
+  --auth-text-error: #ef4444;
+  --auth-border-error: #fecaca;
+  --auth-bg-success: #f0fdf4;
+  --auth-text-success: #16a34a;
+  --auth-border-success: #86efac;
+  --auth-transition-normal: 0.2s ease;
+  --auth-transition-slow: 0.3s ease;
+  --auth-radius-md: 0.5rem;
+  --auth-spacing-xs: 0.25rem;
+  --auth-spacing-sm: 0.5rem;
+  --auth-spacing-md: 1rem;
+  --auth-spacing-lg: 1.5rem;
+  --auth-spacing-xl: 2rem;
+  --auth-spacing-2xl: 3rem;
+  --auth-spacing-3xl: 4rem;
+  --auth-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --auth-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Bring over any global resets you need here */
+/* Global resets and base styles */
 html, body {
   scroll-behavior: smooth;
+}
+
+/* Ensure no horizontal scroll on any screen */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

@@ -19,7 +19,7 @@ export default function HomePage() {
           <div className="nav-logo">
             <a href="/">
               <img src="/logo.svg" alt="K Logo" width="32" height="32" />
-              <span>KDS Corner</span>
+              <span className="logo-text">KDS Corner</span>
             </a>
           </div>
           
@@ -33,14 +33,16 @@ export default function HomePage() {
             </ul>
           </div>
           
-          <div className="nav-auth">
-            <UserProfile />
-          </div>
-          
-          <div className="nav-toggle" id="nav-toggle">
-            <span className="bar"></span>
-            <span className="bar"></span>
-            <span className="bar"></span>
+          <div className="nav-right">
+            <div className="nav-auth">
+              <UserProfile />
+            </div>
+            
+            <div className="nav-toggle" id="nav-toggle">
+              <span className="bar"></span>
+              <span className="bar"></span>
+              <span className="bar"></span>
+            </div>
           </div>
         </div>
       </nav>
@@ -357,10 +359,6 @@ export default function HomePage() {
             <div className="footer-bottom">
               <div className="footer-copyright">
                 <p>&copy; 2025 Kurniawan Dwi Saputra. All rights reserved.</p>
-              </div>
-              <div className="footer-privacy">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
               </div>
             </div>
           </div>

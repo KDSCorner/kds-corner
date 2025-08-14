@@ -66,9 +66,171 @@ export default function BuyerDashboard() {
 
   return (
     <div style={{ 
-      padding: '24px',
+      padding: typeof window !== 'undefined' && window.innerWidth <= 768 ? '12px' : '24px',
       minHeight: '100%'
     }}>
+      <style jsx>{`
+        .welcome-section {
+          margin-bottom: 24px;
+        }
+        
+        .welcome-title {
+          font-size: clamp(20px, 4vw, 28px);
+          font-weight: bold;
+          color: ${theme.textPrimary};
+          margin: 0 0 8px 0;
+        }
+        
+        .welcome-subtitle {
+          font-size: clamp(14px, 3vw, 16px);
+          color: ${theme.textSecondary};
+          margin: 0;
+        }
+        
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 20px;
+          margin-bottom: 30px;
+        }
+        
+        .stats-card {
+          background: ${theme.cardBg};
+          padding: 20px;
+          border-radius: 12px;
+          box-shadow: ${theme.cardShadow};
+          border: 1px solid ${theme.cardBorder};
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .stats-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .quick-actions-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 16px;
+        }
+        
+        .action-button {
+          padding: 16px;
+          background: ${theme.buttonBg};
+          border: 2px solid ${theme.buttonBorder};
+          border-radius: 8px;
+          cursor: pointer;
+          text-align: left;
+          transition: all 0.2s ease;
+          color: ${theme.textPrimary};
+        }
+        
+        .action-button:hover {
+          transform: translateY(-1px);
+        }
+        
+        .order-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 16px;
+          background: ${theme.itemBg};
+          border-radius: 8px;
+          margin-bottom: 12px;
+          transition: all 0.2s ease;
+        }
+        
+        .order-item:hover {
+          background: ${theme.buttonBg};
+          transform: translateY(-1px);
+        }
+        
+        .wishlist-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 16px;
+        }
+        
+        .wishlist-item {
+          border: 1px solid ${theme.cardBorder};
+          border-radius: 8px;
+          overflow: hidden;
+          background: ${theme.cardBg};
+          transition: all 0.2s ease;
+        }
+        
+        .wishlist-item:hover {
+          transform: translateY(-2px);
+          box-shadow: ${theme.cardShadow};
+        }
+        
+        /* Tablet */
+        @media (max-width: 1024px) {
+          .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          
+          .quick-actions-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+        
+        /* Small mobile devices */
+        @media (max-width: 768px) {
+          .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+          
+          .quick-actions-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+          }
+          
+          .wishlist-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+          }
+        }
+        
+        /* Extra small mobile */
+        @media (max-width: 480px) {
+          .order-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+          }
+          
+          .order-details {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+          }
+          
+          .wishlist-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+          }
+        }
+        
+        @media (max-width: 360px) {
+          .stats-card {
+            padding: 16px;
+          }
+          
+          .action-button {
+            padding: 12px;
+          }
+        }
+      `}</style>
+      
+      {/* Welcome Section */}
+      <div className="welcome-section">
+        <h1 className="welcome-title">Welcome back, {user?.displayName || 'Buyer'}! 🛍️</h1>
+        <p className="welcome-subtitle">Discover amazing products and track your orders</p>
+      </div>
 
       <div style={{ 
         display: 'grid', 

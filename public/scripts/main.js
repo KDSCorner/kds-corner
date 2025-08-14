@@ -36,19 +36,54 @@ window.PortfolioApp = window.PortfolioApp || class PortfolioApp {
     const navbar = document.getElementById("navbar");
     let lastScrollY = window.scrollY;
 
-    // Mobile menu toggle
-    navToggle.addEventListener("click", () => {
-      navCenter.classList.toggle("active");
-      navToggle.classList.toggle("active");
+    // Debug logging untuk troubleshooting
+    console.log('Navigation elements found:', {
+      navToggle: !!navToggle,
+      navCenter: !!navCenter,
+      navLinks: navLinks.length,
+      navbar: !!navbar
     });
 
+    // Mobile menu toggle - pastikan element ada
+    if (navToggle && navCenter) {
+      navToggle.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Hamburger clicked');
+        navCenter.classList.toggle("active");
+        navToggle.classList.toggle("active");
+      });
+
+      // Event listener untuk touch devices
+      navToggle.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Hamburger touched');
+        navCenter.classList.toggle("active");
+        navToggle.classList.toggle("active");
+      });
+    } else {
+      console.error('Navigation toggle or center not found');
+    }
+
     // Close mobile menu when clicking on links
-    navLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        const navCenter = document.querySelector(".nav-center");
+    if (navLinks.length > 0) {
+      navLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          if (navCenter && navToggle) {
+            navCenter.classList.remove("active");
+            navToggle.classList.remove("active");
+          }
+        });
+      });
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener("click", (e) => {
+      if (navCenter && navToggle && !navToggle.contains(e.target) && !navCenter.contains(e.target)) {
         navCenter.classList.remove("active");
         navToggle.classList.remove("active");
-      });
+      }
     });
 
     // Navbar scroll effect with hide/show functionality
@@ -490,6 +525,11 @@ window.PortfolioApp = window.PortfolioApp || class PortfolioApp {
     const typeText = (element, text, speed = 100) => {
       return new Promise((resolve) => {
         let i = 0;
+        
+        // Adjust speed based on device and text length
+        const isMobile = window.innerWidth <= 768;
+        const adjustedSpeed = isMobile ? Math.max(50, speed * 0.7) : speed;
+        
         const timer = setInterval(() => {
           element.textContent += text.charAt(i);
           i++;
@@ -502,7 +542,7 @@ window.PortfolioApp = window.PortfolioApp || class PortfolioApp {
             }
             resolve();
           }
-        }, speed);
+        }, adjustedSpeed);
         // Track timer for cleanup
         window.__typewriterTimers.push(timer);
       });
@@ -667,6 +707,39 @@ document.addEventListener("visibilitychange", () => {
       }, 100);
     }
   }
+});
+
+// Handle window resize events (orientation change, etc.)
+let resizeTimeout;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    // Only restart if typewriter elements exist and animation isn't currently running
+    const greetingElement = document.getElementById("greeting");
+    if (greetingElement && !window.__typewriterRunning && window.__portfolioAppInstance) {
+      // Update cursor thickness based on new screen size
+      const isMobile = window.innerWidth <= 768;
+      const cursorWidth = isMobile ? "1px" : "2px";
+      
+      // Update existing typewriter elements
+      const typewriterElements = document.querySelectorAll(".typewriter");
+      typewriterElements.forEach(element => {
+        if (element.style.borderRight) {
+          element.style.borderRight = `${cursorWidth} solid hsl(var(--primary))`;
+        }
+      });
+      
+      // If animation has completed, don't restart, just update styles
+      const hasFinished = greetingElement.classList.contains('finished');
+      if (!hasFinished) {
+        // Restart animation with new mobile settings
+        window.__typewriterRunning = false;
+        setTimeout(() => {
+          window.__portfolioAppInstance.initHeroTypewriter();
+        }, 200);
+      }
+    }
+  }, 300); // Debounce resize events
 });
 
 // Keyboard navigation support

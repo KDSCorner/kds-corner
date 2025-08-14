@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 interface RoleProtectionProps {
   children: React.ReactNode;
-  allowedRoles: ('admin' | 'buyer')[];
+  allowedRoles: ('admin' | 'buyer' | 'seller')[];
   redirectTo?: string;
 }
 
@@ -31,6 +31,8 @@ export function RoleProtection({
           router.push('/admin/dashboard');
         } else if (userRole === 'buyer') {
           router.push('/buyer/dashboard');
+        } else if (userRole === 'seller') {
+          router.push('/seller/dashboard');
         } else {
           router.push('/');
         }

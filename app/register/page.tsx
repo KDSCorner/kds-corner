@@ -2,33 +2,55 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../../lib/auth-context'
 import { useRouter } from 'next/navigation'
+import OnboardingSlider from '../../components/OnboardingSlider'
+import styles from './register.module.css'
 
 export default function RegisterPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [role, setRole] = useState<'admin' | 'buyer'>('buyer')
+  const [role, setRole] = useState<'admin' | 'buyer' | 'seller'>('buyer')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [countdown, setCountdown] = useState(0)
+  const [showPassword, setShowPassword] = useState(false)
+  const [acceptTerms, setAcceptTerms] = useState(false)
   const { signUp } = useAuth()
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setSuccess('')
+    
+    if (!acceptTerms) {
+      setError('Please accept the terms and conditions')
+      return
+    }
+    
     setLoading(true)
 
     try {
       await signUp(email, password, name, role)
-      // Redirect berdasarkan role
-      if (role === 'admin') {
-        router.push('/admin/dashboard')
-      } else {
-        router.push('/buyer/dashboard')
-      }
+      // Show success message
+      setSuccess('🎉 Registration successful! Please login to continue.')
+      setCountdown(3)
+      
+      // Start countdown timer
+      let timeLeft = 3
+      const timer = setInterval(() => {
+        timeLeft -= 1
+        setCountdown(timeLeft)
+        
+        if (timeLeft <= 0) {
+          clearInterval(timer)
+          router.push('/login')
+        }
+      }, 1000)
     } catch (error: any) {
       setError(error.message || 'Registration failed')
     } finally {
@@ -37,118 +59,162 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="auth-page">
-
-      <div className="auth-card">
-        {/* Left form (Registration) */}
-        <section className="auth-main">
-          <div style={{ marginBottom: '16px' }}>
-            <Link href="/" className="auth-link" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <i className="fas fa-arrow-left"></i>
-              <span>Back to Home</span>
-            </Link>
+    <div className={styles.registerContainer}>
+      {/* Left side - Registration Form */}
+      <div className={styles.registerLeft}>
+        <div className={styles.registerFormWrapper}>
+          <div className={styles.registerHeader}>
+            <h1 className={styles.registerTitle}>Create your account</h1>
+            <p className={styles.registerSubtitle}>
+              Join <strong>KDS Corner</strong> today and start boosting your productivity
+              <br />
+              with our powerful workflow tools.
+            </p>
           </div>
-          <h1 className="auth-title">Registration</h1>
+
           {error && (
-            <div style={{ 
-              color: '#ef4444', 
-              backgroundColor: '#fef2f2', 
-              padding: '12px', 
-              borderRadius: '8px', 
-              marginBottom: '16px',
-              border: '1px solid #fecaca'
-            }}>
-              {error}
+            <div className={styles.errorMessage}>
+              <i className="fas fa-exclamation-triangle"></i>
+              <span>{error}</span>
             </div>
           )}
-          <form className="auth-form" onSubmit={handleSubmit}>
-            <label className="auth-input">
+
+          {success && (
+            <div className={styles.successMessage}>
+              <i className="fas fa-check-circle"></i>
+              <div>
+                <div>{success}</div>
+                {countdown > 0 && (
+                  <div style={{ 
+                    fontSize: '12px', 
+                    marginTop: '4px',
+                    opacity: 0.8,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}>
+                    <i className="fas fa-clock"></i>
+                    Redirecting in {countdown}s...
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          <form className={styles.registerForm} onSubmit={handleSubmit} style={success ? {opacity: 0.7, pointerEvents: 'none'} : {}}>
+            <div className={styles.inputGroup}>
               <input 
                 type="text" 
                 name="name" 
                 placeholder="Full Name" 
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                className={styles.formInput}
                 required 
               />
-              <i className="fas fa-user"></i>
-            </label>
-            <label className="auth-input">
+            </div>
+            
+            <div className={styles.inputGroup}>
               <input 
                 type="email" 
                 name="email" 
-                placeholder="Email" 
+                placeholder="Email Address" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className={styles.formInput}
                 required 
               />
-              <i className="fas fa-envelope"></i>
-            </label>
-            <label className="auth-input">
+            </div>
+            
+            <div className={`${styles.inputGroup} ${styles.passwordGroup}`}>
               <input 
-                type="password" 
+                type={showPassword ? "text" : "password"}
                 name="password" 
                 placeholder="Password" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className={styles.formInput}
                 required 
               />
-              <i className="fas fa-lock"></i>
-            </label>
-            
-            <label className="auth-input">
-              <select 
-                name="role" 
-                value={role}
-                onChange={(e) => setRole(e.target.value as 'admin' | 'buyer')}
-                required
-                style={{
-                  width: '100%',
-                  padding: '12px 16px 12px 44px',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px',
-                  fontSize: '16px',
-                  backgroundColor: 'white',
-                  appearance: 'none',
-                  backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 4 5\'><path fill=\'%23666\' d=\'M2 0L0 2h4zm0 5L0 3h4z\'/></svg>")',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'right 12px center',
-                  backgroundSize: '12px'
-                }}
+              <button 
+                type="button"
+                className={styles.passwordToggle}
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                <option value="buyer">Buyer</option>
-                <option value="admin">Admin</option>
-              </select>
-              <i className="fas fa-user-tag"></i>
-            </label>
-
-            <div className="auth-actions">
-              <Link href="/login" className="auth-link">Already have an account?</Link>
-              <button type="submit" className="auth-submit" disabled={loading}>
-                {loading ? 'Registering...' : 'Register'}
+                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
               </button>
             </div>
 
-            <div style={{ marginTop: 12, color: 'hsl(var(--text-muted))', fontSize: 14 }}>or register with social platforms</div>
-            <div className="auth-social">
-              <button aria-label="Register with Google"><i className="fab fa-google"></i></button>
-              <button aria-label="Register with Facebook"><i className="fab fa-facebook-f"></i></button>
-              <button aria-label="Register with GitHub"><i className="fab fa-github"></i></button>
-              <button aria-label="Register with LinkedIn"><i className="fab fa-linkedin-in"></i></button>
+            <div className={styles.inputGroup}>
+              <select 
+                name="role" 
+                value={role}
+                onChange={(e) => setRole(e.target.value as 'admin' | 'buyer' | 'seller')}
+                className={styles.formSelect}
+                required
+              >
+                <option value="buyer">🛒 Buyer Account - Shop products</option>
+                <option value="seller">🏪 Seller Account - Sell your products</option>
+                <option value="admin">👑 Admin Account - Manage platform</option>
+              </select>
+              <i className={`fas fa-user-tag ${styles.selectIcon}`}></i>
+            </div>
+
+            <div className={styles.registerOptions}>
+              <label className={styles.termsCheckbox}>
+                <input 
+                  type="checkbox" 
+                  checked={acceptTerms}
+                  onChange={(e) => setAcceptTerms(e.target.checked)}
+                />
+                <span className="checkmark"></span>
+                <span>
+                  I agree to the <Link href="#">Terms of Service</Link> and{' '}
+                  <Link href="#">Privacy Policy</Link>
+                </span>
+              </label>
+            </div>
+
+            <button type="submit" className={styles.registerButton} disabled={loading || !acceptTerms}>
+              {loading ? (
+                <>
+                  <i className="fas fa-spinner fa-spin"></i>
+                  <span>Creating account...</span>
+                </>
+              ) : (
+                'Create Account'
+              )}
+            </button>
+
+            <div className={styles.divider}>
+              <span>or continue with</span>
+            </div>
+
+            <div className={styles.socialLogin}>
+              <button type="button" className={`${styles.socialButton} ${styles.google}`}>
+                <i className="fab fa-google"></i>
+              </button>
+              <button type="button" className={`${styles.socialButton} ${styles.apple}`}>
+                <i className="fab fa-apple"></i>
+              </button>
+              <button type="button" className={`${styles.socialButton} ${styles.facebook}`}>
+                <i className="fab fa-facebook-f"></i>
+              </button>
+            </div>
+
+            <div className={styles.loginLink}>
+              <span>Already have an account? </span>
+              <Link href="/login">Sign in</Link>
             </div>
           </form>
-        </section>
-
-        {/* Right aside */}
-        <aside className="auth-aside">
-          <h2>Welcome Back!</h2>
-          <p>Already have an account?</p>
-          <Link href="/login" className="aside-action">
-            <span>Login</span>
-            <i className="fas fa-arrow-right"></i>
-          </Link>
-        </aside>
+        </div>
       </div>
-    </main>
+
+      {/* Right side - Onboarding Slider */}
+      <div className={styles.registerRight}>
+        <OnboardingSlider autoPlayInterval={4500} />
+      </div>
+    </div>
   )
 }

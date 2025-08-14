@@ -14,6 +14,8 @@ export function useRoleRedirect(skipRedirect = false) {
         router.push('/admin/dashboard');
       } else if (userRole === 'buyer') {
         router.push('/buyer/dashboard');
+      } else if (userRole === 'seller') {
+        router.push('/seller/dashboard');
       }
     }
   }, [user, userRole, loading, router, skipRedirect]);

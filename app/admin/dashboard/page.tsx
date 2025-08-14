@@ -130,20 +130,230 @@ export default function AdminDashboard() {
 
   return (
     <div style={{ 
-      padding: '24px',
+      padding: window.innerWidth <= 768 ? '12px' : '24px',
       minHeight: '100%',
       backgroundColor: theme.background
     }}>
-
-      {/* Main Stats Row */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '20px',
-        marginBottom: '24px'
-      }}>
+      <style jsx>{`
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+        
+        .welcome-section {
+          margin-bottom: 24px;
+        }
+        
+        .welcome-title {
+          font-size: clamp(20px, 4vw, 28px);
+          font-weight: bold;
+          color: ${theme.text};
+          margin: 0 0 8px 0;
+        }
+        
+        .welcome-subtitle {
+          font-size: clamp(14px, 3vw, 16px);
+          color: ${theme.textSecondary};
+          margin: 0;
+        }
+        
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 20px;
+          margin-bottom: 24px;
+        }
+        
+        .stats-card {
+          background: ${theme.cardBg};
+          padding: 20px;
+          border-radius: 12px;
+          box-shadow: ${theme.shadow};
+          border: 1px solid ${theme.border};
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .stats-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .analytics-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 24px;
+          margin-bottom: 24px;
+        }
+        
+        .quick-actions-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 16px;
+        }
+        
+        .bottom-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+        
+        .action-button {
+          padding: 16px;
+          background: ${theme.cardBg};
+          border: 2px solid ${theme.border};
+          border-radius: 12px;
+          cursor: pointer;
+          text-align: left;
+          transition: all 0.2s ease;
+          color: ${theme.text};
+          text-decoration: none;
+          display: block;
+        }
+        
+        .action-button:hover {
+          border-color: #3b82f6;
+          transform: translateY(-1px);
+        }
+        
+        .recent-orders-card, .top-products-card {
+          background: ${theme.cardBg};
+          border-radius: 12px;
+          box-shadow: ${theme.shadow};
+          border: 1px solid ${theme.border};
+          overflow: hidden;
+        }
+        
+        .card-header {
+          padding: 20px 24px;
+          border-bottom: 1px solid ${theme.border};
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+        
+        .order-item, .product-item {
+          padding: 16px 24px;
+          border-bottom: 1px solid ${theme.border};
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          transition: background-color 0.2s ease;
+        }
+        
+        .order-item:hover, .product-item:hover {
+          background-color: ${theme.hoverBg};
+        }
+        
+        .order-item:last-child, .product-item:last-child {
+          border-bottom: none;
+        }
+        
+        /* Tablet and larger mobile */
+        @media (min-width: 768px) {
+          .analytics-grid {
+            grid-template-columns: 2fr 1fr;
+          }
+          
+          .bottom-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+        
+        /* Small mobile devices */
+        @media (max-width: 480px) {
+          .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+          
+          .quick-actions-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+          }
+          
+          .card-header {
+            padding: 16px 20px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+          }
+          
+          .order-item, .product-item {
+            padding: 12px 20px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+          }
+          
+          .order-item .order-details,
+          .product-item .product-details {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+          }
+        }
+        
+        /* Extra small mobile */
+        @media (max-width: 360px) {
+          .stats-card {
+            padding: 16px;
+          }
+          
+          .action-button {
+            padding: 12px;
+          }
+        }
+        
+          .bottom-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+          
+          .card-padding {
+            padding: 16px !important;
+          }
+          
+          .stat-number {
+            font-size: 24px !important;
+          }
+          
+          .section-title {
+            font-size: 18px !important;
+          }
+        }
+        
+        /* Small mobile */
+        @media (max-width: 480px) {
+          .card-padding {
+            padding: 12px !important;
+          }
+          
+          .stat-number {
+            font-size: 20px !important;
+          }
+          
+          .section-title {
+            font-size: 16px !important;
+          }
+          
+          .icon-container {
+            width: 40px !important;
+            height: 40px !important;
+          }
+          
+          .icon-container i {
+            font-size: 18px !important;
+          }
+        }
+      `}</style>
+        {/* Main Stats Row */}
+        <div className="stats-grid">
         {/* Total Users Card */}
-        <div style={{
+        <div className="card-padding" style={{
           backgroundColor: theme.cardBg,
           padding: '24px',
           borderRadius: '12px',
@@ -276,7 +486,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div style={{
+      <div className="card-padding" style={{
         backgroundColor: theme.cardBg,
         padding: '24px',
         borderRadius: '12px',
@@ -284,14 +494,10 @@ export default function AdminDashboard() {
         border: `1px solid ${theme.border}`,
         marginBottom: '30px'
       }}>
-        <h2 style={{ margin: '0 0 20px 0', fontSize: '20px', fontWeight: 'bold', color: theme.text }}>
+        <h2 className="section-title" style={{ margin: '0 0 20px 0', fontSize: '20px', fontWeight: 'bold', color: theme.text }}>
           Quick Actions
         </h2>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '16px'
-        }}>
+        <div className="quick-actions-grid">
           {[
             { icon: 'fas fa-users', color: '#3b82f6', title: 'Manage Users', desc: 'Add, edit or remove users' },
             { icon: 'fas fa-shopping-bag', color: '#10b981', title: 'Manage Products', desc: 'Add, edit or remove products' },
@@ -323,12 +529,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Analytics and Data Section */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '2fr 1fr',
-        gap: '24px',
-        marginBottom: '24px'
-      }}>
+      <div className="analytics-grid">
         {/* Top Products */}
         <div style={{
           backgroundColor: theme.cardBg,
@@ -450,11 +651,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stock Alert and System Info */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '24px'
-      }}>
+      <div className="bottom-grid">
         {/* Stock Alerts */}
         <div style={{
           backgroundColor: theme.cardBg,

@@ -14,10 +14,10 @@ import { auth, db } from './firebase';
 
 interface AuthContextType {
   user: User | null;
-  userRole: 'admin' | 'buyer' | null;
+  userRole: 'admin' | 'buyer' | 'seller' | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, name?: string, role?: 'admin' | 'buyer') => Promise<void>;
+  signUp: (email: string, password: string, name?: string, role?: 'admin' | 'buyer' | 'seller') => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -37,7 +37,7 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
-  const [userRole, setUserRole] = useState<'admin' | 'buyer' | null>(null);
+  const [userRole, setUserRole] = useState<'admin' | 'buyer' | 'seller' | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     await signInWithEmailAndPassword(auth, email, password);
   };
 
-  const signUp = async (email: string, password: string, name?: string, role: 'admin' | 'buyer' = 'buyer') => {
+  const signUp = async (email: string, password: string, name?: string, role: 'admin' | 'buyer' | 'seller' = 'buyer') => {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     
     if (result.user) {
@@ -91,7 +91,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
         createdAt: new Date().toISOString(),
       });
       
-      setUserRole(role);
+      // Sign out immediately after registration
+      // User should login manually to access their account
+      await firebaseSignOut(auth);
+      setUserRole(null);
     }
   };
 

@@ -48,14 +48,27 @@ window.AnimationController = window.AnimationController || class AnimationContro
     typewriterElements.forEach((element) => {
       const text = element.textContent;
       element.textContent = "";
-      element.style.borderRight = "2px solid hsl(var(--primary))";
+      
+      // Adjust cursor thickness based on screen size
+      const isMobile = window.innerWidth <= 768;
+      const cursorWidth = isMobile ? "1px" : "2px";
+      element.style.borderRight = `${cursorWidth} solid hsl(var(--primary))`;
+      
+      // Adjust typing speed based on text length and screen size
+      const baseSpeed = isMobile ? 80 : 100;
+      const adjustedSpeed = text.length > 20 ? baseSpeed * 0.8 : baseSpeed;
 
       let i = 0;
       const typeWriter = () => {
         if (i < text.length) {
           element.textContent += text.charAt(i);
           i++;
-          setTimeout(typeWriter, 100);
+          
+          // Add a small pause for spaces to make it more natural
+          const isSpace = text.charAt(i - 1) === ' ';
+          const delay = isSpace ? adjustedSpeed * 1.5 : adjustedSpeed;
+          
+          setTimeout(typeWriter, delay);
         } else {
           // Remove cursor after typing is complete
           setTimeout(() => {
@@ -64,8 +77,9 @@ window.AnimationController = window.AnimationController || class AnimationContro
         }
       };
 
-      // Start typing after a delay
-      setTimeout(typeWriter, 1000);
+      // Start typing after a delay (shorter on mobile for faster page load perception)
+      const initialDelay = isMobile ? 500 : 1000;
+      setTimeout(typeWriter, initialDelay);
     });
   }
 

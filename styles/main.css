@@ -337,6 +337,17 @@ a:hover {
   border-radius: 50%;
 }
 
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.nav-auth {
+  display: flex;
+  align-items: center;
+}
+
 .nav-toggle {
   display: none;
   flex-direction: column;

@@ -5,12 +5,15 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../lib/auth-context'
 import { useRouter } from 'next/navigation'
+import OnboardingSlider from '../../components/OnboardingSlider'
+import styles from './login.module.css'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const { signIn, user, userRole } = useAuth()
   const router = useRouter()
   
@@ -19,6 +22,8 @@ export default function LoginPage() {
     if (user && userRole) {
       if (userRole === 'admin') {
         router.push('/admin/dashboard')
+      } else if (userRole === 'seller') {
+        router.push('/seller/dashboard')
       } else if (userRole === 'buyer') {
         router.push('/buyer/dashboard')
       }
@@ -41,81 +46,107 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="auth-page">
-
-      <div className="auth-card">
-        {/* Left aside */}
-        <aside className="auth-aside">
-          <h2>Hello, Welcome!</h2>
-          <p>Don't have an account?</p>
-          <Link href="/register" className="aside-action">
-            <span>Register</span>
-            <i className="fas fa-arrow-right"></i>
-          </Link>
-        </aside>
-
-        {/* Main form */}
-        <section className="auth-main">
-          <div style={{ marginBottom: '16px' }}>
-            <Link href="/" className="auth-link" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <i className="fas fa-arrow-left"></i>
-              <span>Back to Home</span>
-            </Link>
+    <div className={styles.loginContainer}>
+      {/* Left side - Login Form */}
+      <div className={styles.loginLeft}>
+        <div className={styles.loginFormWrapper}>
+          <div className={styles.loginHeader}>
+            <h1 className={styles.loginTitle}>Welcome back!</h1>
+            <p className={styles.loginSubtitle}>
+              Simplify your workflow and boost your productivity
+              <br />
+              with <strong>KDS Corner</strong>. Get started for free.
+            </p>
           </div>
-          <h1 className="auth-title">Login</h1>
+
           {error && (
-            <div style={{ 
-              color: '#ef4444', 
-              backgroundColor: '#fef2f2', 
-              padding: '12px', 
-              borderRadius: '8px', 
-              marginBottom: '16px',
-              border: '1px solid #fecaca'
-            }}>
-              {error}
+            <div className={styles.errorMessage}>
+              <i className="fas fa-exclamation-triangle"></i>
+              <span>{error}</span>
             </div>
           )}
-          <form className="auth-form" onSubmit={handleSubmit}>
-            <label className="auth-input">
+
+          <form className={styles.loginForm} onSubmit={handleSubmit}>
+            <div className={styles.inputGroup}>
               <input 
                 type="email" 
                 name="email" 
-                placeholder="Email" 
+                placeholder="Username" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className={styles.formInput}
                 required 
               />
-              <i className="fas fa-envelope"></i>
-            </label>
-            <label className="auth-input">
+            </div>
+            
+            <div className={`${styles.inputGroup} ${styles.passwordGroup}`}>
               <input 
-                type="password" 
+                type={showPassword ? "text" : "password"}
                 name="password" 
                 placeholder="Password" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className={styles.formInput}
                 required 
               />
-              <i className="fas fa-lock"></i>
-            </label>
-
-            <div className="auth-actions">
-              <a href="#" className="auth-link">Forgot password?</a>
-              <button type="submit" className="auth-submit" disabled={loading}>
-                {loading ? 'Logging in...' : 'Login'}
+              <button 
+                type="button"
+                className={styles.passwordToggle}
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
               </button>
             </div>
 
-            <div style={{ marginTop: 12, color: 'hsl(var(--text-muted))', fontSize: 14 }}>or login with social platforms</div>
-            <div className="auth-social">
-              <button aria-label="Login with Google"><i className="fab fa-google"></i></button>
-              <button aria-label="Login with Facebook"><i className="fab fa-facebook-f"></i></button>
-              <button aria-label="Login with GitHub"><i className="fab fa-github"></i></button>
-              <button aria-label="Login with LinkedIn"><i className="fab fa-linkedin-in"></i></button>
+            <div className={styles.loginOptions}>
+              <label className={styles.rememberCheckbox}>
+                <input type="checkbox" />
+                <span className="checkmark"></span>
+                <span>Remember me</span>
+              </label>
+              <Link href="#" className={styles.forgotLink}>Forgot Password?</Link>
+            </div>
+
+            <button type="submit" className={styles.loginButton} disabled={loading}>
+              {loading ? (
+                <>
+                  <i className="fas fa-spinner fa-spin"></i>
+                  <span>Logging in...</span>
+                </>
+              ) : (
+                'Login'
+              )}
+            </button>
+
+            <div className={styles.divider}>
+              <span>or continue with</span>
+            </div>
+
+            <div className={styles.socialLogin}>
+              <button type="button" className={`${styles.socialButton} ${styles.google}`}>
+                <i className="fab fa-google"></i>
+              </button>
+              <button type="button" className={`${styles.socialButton} ${styles.apple}`}>
+                <i className="fab fa-apple"></i>
+              </button>
+              <button type="button" className={`${styles.socialButton} ${styles.facebook}`}>
+                <i className="fab fa-facebook-f"></i>
+              </button>
+            </div>
+
+            <div className={styles.registerLink}>
+              <span>Not a member? </span>
+              <Link href="/register">Register now</Link>
             </div>
           </form>
-        </section>
+        </div>
       </div>
-    </main>
+
+      {/* Right side - Onboarding Slider */}
+      <div className={styles.loginRight}>
+        <OnboardingSlider autoPlayInterval={5000} />
+      </div>
+    </div>
   )
 }

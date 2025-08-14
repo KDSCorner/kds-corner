@@ -68,6 +68,10 @@
   }
 
   /* Navigation Mobile */
+  .nav-right {
+    gap: var(--spacing-sm);
+  }
+  
   .nav-menu {
     position: fixed;
     left: -100%;

@@ -55,6 +55,7 @@ export default function UserProfile({ className = '' }: UserProfileProps) {
 
   const getDashboardUrl = () => {
     if (userRole === 'admin') return '/admin/dashboard'
+    if (userRole === 'seller') return '/seller/dashboard'
     if (userRole === 'buyer') return '/buyer/dashboard'
     return '/dashboard'
   }
@@ -125,7 +126,8 @@ export default function UserProfile({ className = '' }: UserProfileProps) {
               <div className="dropdown-email">{user.email}</div>
               {userRole && (
                 <div className="dropdown-role">
-                  {userRole === 'admin' ? 'Administrator' : 'Buyer'}
+                  {userRole === 'admin' ? 'Administrator' : 
+                   userRole === 'seller' ? 'Store Owner' : 'Customer'}
                 </div>
               )}
             </div>
@@ -466,9 +468,16 @@ export default function UserProfile({ className = '' }: UserProfileProps) {
 
         /* Mobile responsiveness */
         @media (max-width: 768px) {
+          .user-profile-dropdown {
+            position: relative;
+            display: inline-block;
+          }
+          
           .user-profile-trigger {
             padding: 6px 10px;
             gap: 6px;
+            font-size: 12px;
+            border-radius: 20px;
           }
           
           .user-name {
@@ -486,18 +495,130 @@ export default function UserProfile({ className = '' }: UserProfileProps) {
           }
           
           .user-dropdown-menu {
-            min-width: 300px;
-            right: -15px;
-            width: 300px;
+            position: fixed;
+            top: 70px;
+            right: 10px;
+            left: auto;
+            min-width: 320px;
+            width: 320px;
+            max-width: calc(100vw - 20px);
+            transform: none;
+            z-index: 9999;
           }
           
           .dropdown-header {
-            padding: 18px;
+            padding: 16px;
+            gap: 12px;
+          }
+          
+          .dropdown-avatar {
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 14px !important;
+          }
+          
+          .dropdown-name {
+            font-size: 15px !important;
+          }
+          
+          .dropdown-email {
+            font-size: 12px !important;
+          }
+          
+          .dropdown-role {
+            font-size: 9px !important;
+            padding: 3px 8px !important;
+          }
+          
+          .dropdown-menu-items {
+            padding: 16px 0;
           }
           
           .dropdown-item {
-            padding: 14px 18px;
-            min-height: 48px;
+            padding: 12px 16px;
+            min-height: 44px;
+            font-size: 13px;
+            gap: 12px;
+          }
+          
+          .dropdown-item i {
+            font-size: 14px !important;
+            width: 16px;
+          }
+          
+          .dropdown-item-divider {
+            margin: 6px 16px;
+          }
+        }
+        
+        /* Extra small mobile */
+        @media (max-width: 480px) {
+          .user-profile-trigger {
+            padding: 3px 6px;
+            gap: 3px;
+          }
+          
+          .user-avatar {
+            width: 20px;
+            height: 20px;
+            font-size: 9px;
+          }
+          
+          .dropdown-icon {
+            font-size: 7px;
+          }
+          
+          .user-dropdown-menu {
+            position: fixed;
+            top: 70px;
+            right: 5px;
+            left: auto;
+            min-width: 280px;
+            width: calc(100vw - 10px);
+            max-width: 320px;
+            max-height: 85vh;
+            overflow-y: auto;
+            transform: none;
+            z-index: 9999;
+          }
+          
+          .dropdown-header {
+            padding: 14px;
+            gap: 10px;
+          }
+          
+          .dropdown-avatar {
+            width: 35px !important;
+            height: 35px !important;
+            font-size: 12px !important;
+          }
+          
+          .dropdown-name {
+            font-size: 14px !important;
+          }
+          
+          .dropdown-email {
+            font-size: 11px !important;
+          }
+          
+          .dropdown-role {
+            font-size: 8px !important;
+            padding: 2px 6px !important;
+          }
+          
+          .dropdown-menu-items {
+            padding: 12px 0;
+          }
+          
+          .dropdown-item {
+            padding: 10px 14px;
+            min-height: 40px;
+            font-size: 12px;
+          }
+          
+          .dropdown-item i {
+            font-size: 12px !important;
+            width: 14px;
           }
         }
       `}</style>
