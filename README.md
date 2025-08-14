@@ -13,7 +13,7 @@ Modern e-commerce platform built with Next.js 14, TypeScript, and Firebase.
 
 ## 🚀 Live Demo
 
-- **Website**: [Your Netlify/Vercel URL]
+- **Website**: https://kds-corner.netlify.app/
 - **GitHub**: https://github.com/KDSCorner/kds-corner
 
 ## 🛠 Tech Stack
